@@ -1,10 +1,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-export default function masterEventsPage() {
+export default function MasterProfilePage() {
   return (
     <View>
-      <Text>masterEventsPage</Text>
+      <Text>MasterProfilePage</Text>
     </View>
   )
 }

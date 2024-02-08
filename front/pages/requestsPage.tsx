@@ -1,10 +1,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-export default function event() {
+export default function RequestsPage() {
   return (
     <View>
-      <Text>event</Text>
+      <Text>requests</Text>
     </View>
   )
 }

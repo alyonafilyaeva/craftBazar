@@ -1,10 +1,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-export default function authPage() {
+export default function AuthPage() {
   return (
     <View>
-      <Text>authPage</Text>
+      <Text>AuthPage</Text>
     </View>
   )
 }

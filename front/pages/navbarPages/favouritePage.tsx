@@ -1,10 +1,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-export default function favouritePage() {
+export default function FavouritePage() {
   return (
     <View>
-      <Text>favouritePage</Text>
+      <Text>F</Text>
     </View>
   )
 }
