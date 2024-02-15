@@ -3,6 +3,7 @@ import React from 'react'
 import { styles } from './styles'
 import { colors, paddings } from "@/styles/styles";
 import { IEvent } from '@/models/models';
+import { AntDesign } from '@expo/vector-icons';
 
 interface EventProps {
     event: IEvent
@@ -34,7 +35,7 @@ export default function Event(props: EventProps) {
                     </View>
 
                 </View>
-                <Image source={require("../../assets/images/heart.png")} />
+                <AntDesign name="hearto" size={30} color={colors.accentColor} />
             </View>
         </View>
     )

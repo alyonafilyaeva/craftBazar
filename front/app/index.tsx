@@ -8,26 +8,40 @@ import Navbar from "@/navigation/navbarNavigation";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AuthPage from "@/pages/authPage";
+import { useFonts } from "expo-font";
 
 const Stack = createNativeStackNavigator();
+
+function AuthFlow() {
+  let [user, setUser] = useState(false)
+  return (
+    user ?
+      (
+        <Stack.Screen
+          name="Navbar"
+          component={Navbar}
+        />) :
+      (<Stack.Screen
+        name="Auth"
+        component={AuthPage}
+      />)
+  )
+
+}
 
 export default function App() {
 
   return (
     <NavigationContainer independent={true} >
-      <Stack.Navigator  screenOptions={{
-    headerShown: false
-  }}>
+      <Stack.Navigator screenOptions={{
+        headerShown: false
+      }}>
+        {/* <Stack.Screen name="AuthFlow" component={AuthFlow} /> */}
         <Stack.Screen
           name="Navbar"
           component={Navbar}
         />
-        <Stack.Screen
-          name="Auth"
-          component={AuthPage}
-        />
       </Stack.Navigator>
-      {/* <Navbar /> */}
     </NavigationContainer>
 
   );

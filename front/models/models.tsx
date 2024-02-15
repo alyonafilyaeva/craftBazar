@@ -14,6 +14,24 @@ export interface IEvent {
     dateCreated?: string,
 }
 
-export interface IEvents {
-    [key: string]: IEvent;
-  }
+export interface IMaster {
+    id?: number,
+    nickname?: string,
+    title?: string,
+    descriprion?: string,
+    picture?: string,
+    city?: string,
+    contacts?: string,
+    time?: string,
+    category?: string
+}
+
+export interface IProduct {
+    id?: number,
+      title?: string,
+      picture?: string,
+      descriprion?:
+      string,
+      cost?: number,
+      idMaster?: number,
+}
