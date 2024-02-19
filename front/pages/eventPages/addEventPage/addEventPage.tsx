@@ -1,13 +1,15 @@
 import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import { Formik, Field, Form } from 'formik'
 import { stylesSheet, colors, fonts } from '@/styles/styles'
 import { styles } from './styles'
 import { FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
 import axios from 'axios'
 import { baseURL } from '@/constants/constants'
+import { AuthContext } from '@/app/authContext'
 
-export default function AddEventPage() {
+export default function AddEventPage({navigation}) {
+  const {user} = useContext(AuthContext)
   function AddEvent(values) {
     axios
       .post(
@@ -23,7 +25,7 @@ export default function AddEventPage() {
           link: values.link,
           cost: values.cost,
           picture: values.picture,
-          idOrganizer: values.idOrganizer,
+          idOrganizer: user.id,
         },
         {
           headers: {
@@ -40,8 +42,8 @@ export default function AddEventPage() {
     <ScrollView style={stylesSheet.container}>
       <View style={styles.topPanel}>
         <TouchableOpacity style={stylesSheet.back} onPress={() =>
-                navigation.goBack()
-            }>
+          navigation.goBack()
+        }>
           <FontAwesome6 name="angle-left" size={24} color={colors.accentColor} />
         </TouchableOpacity>
         <View style={{ justifyContent: 'center', alignItems: 'center', width: 'auto', marginLeft: 10 }}>
@@ -61,7 +63,6 @@ export default function AddEventPage() {
           link: "",
           cost: '',
           picture: "",
-          idOrganizer: 3,
         }}
         onSubmit={(values) => AddEvent(values)}
       >
@@ -95,7 +96,7 @@ export default function AddEventPage() {
                 <Text style={{ fontSize: fonts.descriptionFont, fontWeight: '700' }}>
                   Время
                 </Text>
-                <View style={{ display: 'flex', flexDirection: 'row' }}>
+                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
                   <TextInput
                     style={[stylesSheet.input, styles.timeInput]}
                     onChangeText={handleChange("time_start")}
@@ -114,14 +115,45 @@ export default function AddEventPage() {
             </View>
             <View style={styles.inputBlock}>
               <Text style={{ fontSize: fonts.descriptionFont, fontWeight: '700' }}>
-                Стоимость участия
+                Город
               </Text>
               <TextInput
                 style={stylesSheet.input}
-                onChangeText={handleChange("cost")}
-                value={values.cost}
-                placeholder="Стоимость участия"
+                onChangeText={handleChange("city")}
+                value={values.city}
+                placeholder="Город"
               />
+            </View>
+            <View style={styles.inputBlock}>
+              <Text style={{ fontSize: fonts.descriptionFont, fontWeight: '700' }}>
+                Место проводения
+              </Text>
+              <TextInput
+                style={stylesSheet.input}
+                onChangeText={handleChange("address")}
+                value={values.address}
+                placeholder="Место проведения"
+              />
+            </View>
+            <View style={styles.inputBlock}>
+              <Text style={{ fontSize: fonts.descriptionFont, fontWeight: '700' }}>
+                Стоимость участия
+              </Text>
+              <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                <TextInput
+                  style={[stylesSheet.input, {width: '45%'}]}
+                  onChangeText={handleChange("cost")}
+                  value={values.cost}
+                  placeholder="Стоимость участия"
+                />
+                <TextInput
+                  style={[stylesSheet.input, {width: '45%'}]}
+                  onChangeText={handleChange("cost")}
+                  value={values.cost}
+                  placeholder="В день"
+                />
+              </View>
+
             </View>
             <View style={styles.inputBlock}>
               <Text style={{ fontSize: fonts.descriptionFont, fontWeight: '700' }}>
@@ -145,6 +177,17 @@ export default function AddEventPage() {
                 onChangeText={handleChange("title")}
                 value={values.title}
                 placeholder="Сайт, страничка ВКонтакте и тд."
+              />
+            </View>
+            <View style={styles.inputBlock}>
+              <Text style={{ fontSize: fonts.descriptionFont, fontWeight: '700' }}>
+                Ожидаемое количество мастеров
+              </Text>
+              <TextInput
+                style={stylesSheet.input}
+                onChangeText={handleChange("title")}
+                value={values.title}
+                placeholder="Ожидаемое количество мастеров"
               />
             </View>
             <View style={styles.imageBlock}>

@@ -24,7 +24,6 @@ export const stylesSheet = StyleSheet.create({
         backgroundColor: colors.mainColor,
         padding: paddings.bodyPadding,
         fontFamily: 'Montserrat',
-        /* paddingBottom: 50, */
         height: '100%'
     },
     containerWhite :{

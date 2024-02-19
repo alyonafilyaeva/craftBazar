@@ -39,6 +39,7 @@ export const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: paddings.bodyPadding
+        marginTop: paddings.bodyPadding,
+        marginBottom: 30
     }
 })
