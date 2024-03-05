@@ -11,7 +11,7 @@ import { Feather, Octicons } from '@expo/vector-icons';
 export default function EventsPage({ navigation }) {
   let [events, setEvents] = useState<Array<IEvent>>([])
   useEffect(() => {
-    axios.get(`${baseURL}/events`).then(response => setEvents(response.data))
+    axios.get(`${baseURL}/api/events`).then(response => setEvents(response.data))
     console.log(events[0]?.address)
   }, [])
   return (

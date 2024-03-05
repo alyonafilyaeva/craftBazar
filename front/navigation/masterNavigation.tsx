@@ -15,10 +15,10 @@ import MasterProfilePage from '@/pages/navbarPages/masterProfilePage';
 import AddProductPage from '@/pages/productPages/addProductPage';
 import EditProductPage from '@/pages/productPages/editProductPage';
 import ProductPage from '@/pages/productPages/productPage';
-import MastersEventsPage from '@/pages/mastersEventsPage';
 import InvetationsPage from '@/pages/invetationsPage';
 import RequestsPage from '@/pages/requestsPage';
 import MastersPage from '@/pages/navbarPages/mastersPage';
+import MastersEventsPage from '@/pages/mastersEventsPage/mastersEventsPage';
 
 const Stack = createNativeStackNavigator();
 export default function MasterNavigation() {

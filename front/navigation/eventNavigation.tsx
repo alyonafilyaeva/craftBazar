@@ -15,7 +15,7 @@ import MasterProfilePage from '@/pages/navbarPages/masterProfilePage';
 import AddProductPage from '@/pages/productPages/addProductPage';
 import EditProductPage from '@/pages/productPages/editProductPage';
 import ProductPage from '@/pages/productPages/productPage';
-import MastersEventsPage from '@/pages/mastersEventsPage';
+import MastersEventsPage from '@/pages/mastersEventsPage/mastersEventsPage';
 import InvetationsPage from '@/pages/invetationsPage';
 import RequestsPage from '@/pages/requestsPage';
 

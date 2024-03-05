@@ -12,7 +12,7 @@ import Master from '@/components/master/master'
 export default function MastersPage({ navigation }) {
   let [masters, setMasters] = useState<Array<IEvent>>([])
   useEffect(() => {
-    axios.get(`${baseURL}/masters`).then(response => setMasters(response.data))
+    axios.get(`${baseURL}/api/masters`).then(response => setMasters(response.data))
   }, [])
   return (
     <View style={stylesSheet.container}>

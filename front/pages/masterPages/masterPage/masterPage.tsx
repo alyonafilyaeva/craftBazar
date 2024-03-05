@@ -4,7 +4,7 @@ import { stylesSheet } from '@/styles/styles'
 import { Feather, MaterialIcons, FontAwesome, FontAwesome6, AntDesign, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { colors, fonts, paddings } from '@/styles/styles';
 import { styles } from './styles';
-import { IEvent, IMaster, IProduct } from '@/models/models';
+import { IEvent, IMaster, IMastersEvents, IProduct } from '@/models/models';
 import axios from 'axios';
 import { baseURL } from '@/constants/constants';
 import Product from '@/components/product/product';
@@ -14,9 +14,11 @@ export default function MasterPage({ navigation, route }) {
   let id = route.params.id
   let [master, setMaster] = useState<IMaster>()
   let [products, setProducts] = useState<Array<IProduct>>()
+  let [mastersEvents, setMastersEvents] = useState<Array<IMastersEvents>>([])
   useEffect(() => {
-    axios.get(`${baseURL}/masters/${id}`).then(response => setMaster(response.data))
-    axios.get(`${baseURL}/products/?idMaster=${id}`).then(response => setProducts(response.data))
+    axios.get(`${baseURL}/api/masters/${id}`).then(response => setMaster(response.data[0]))
+    axios.get(`${baseURL}/api/products/?master_id=${id}`).then(response => setProducts(response.data))
+    axios.get(`${baseURL}/api/mastersEvents?master_id=${id}`).then(response => setMastersEvents(response.data))
   }, [])
   return (
     <ScrollView>
@@ -91,8 +93,8 @@ export default function MasterPage({ navigation, route }) {
             <View style={[styles.circlePurple, styles.fourthCircle]}></View>
             <View style={[styles.circlePink, styles.fifthCircle]}></View>
           </View>
-          <Text style={[styles.mainText, { left: -90 }]}>23 события</Text>
-          <TouchableOpacity style={styles.detail}>
+          <Text style={[styles.mainText, { left: -90 }]}>{mastersEvents.length} события</Text>
+          <TouchableOpacity style={styles.detail} onPress={() => {navigation.navigate('MastersEvents', {id: id, title: 'События мастера', path: 'master_id'})}}>
             <Text style={styles.accentText}>Подробнее</Text>
           </TouchableOpacity>
         </View>

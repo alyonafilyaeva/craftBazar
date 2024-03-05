@@ -1,17 +1,19 @@
 export interface IEvent {
     id?: number,
     title?: string,
-    date?: string,
+    date_start?: string,
+    date_finish?: string,
     time_start?: string,
     time_finish?: string,
     city?: string,
     address?: string,
-    descriprion?: string,
+    description?: string,
+    contacts?: string,
     link?: string,
     cost?: number,
-    picture?: string,
-    idOrganizer?: number,
-    dateCreated?: string,
+    path_picture?: string,
+    organizer_id?: number,
+    date_created?: string,
 }
 
 export interface IMaster {
@@ -28,10 +30,26 @@ export interface IMaster {
 
 export interface IProduct {
     id?: number,
-      title?: string,
-      picture?: string,
-      descriprion?:
-      string,
-      cost?: number,
-      idMaster?: number,
+    title?: string,
+    picture?: string,
+    descriprion?:
+    string,
+    cost?: number,
+    idMaster?: number,
+}
+
+export interface IMastersEvents {
+    id: number,
+    master_id: number,
+    event_id: number,
+    is_paid: false,
+    nickname: string,
+    title: string,
+    description: string,
+    city: string,
+    contacts: string,
+    picture_path: string,
+    user_id: number,
+    date_start: string,
+    address: string
 }
