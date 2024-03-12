@@ -12,22 +12,42 @@ class MasterController {
   }
 
   async getMasters(req, res) {
-    const masters = await db.query("SELECT * FROM masters");
-    res.json(masters.rows);
+    const user_id = req.query.user_id;
+    if (user_id) {
+      const master = await db.query(
+        "SELECT * FROM masters WHERE user_id = $1",
+        [user_id]
+      );
+      res.json(master.rows);
+    } else {
+      const masters = await db.query("SELECT * FROM masters")
+      res.json(masters.rows)
+    }
+    
   }
 
   async getMaster(req, res) {
     const id = req.params.id;
+
     const master = await db.query("SELECT * FROM masters WHERE id = $1", [id]);
-    res.json(master.rows)
+    res.json(master.rows);
   }
 
   async updateMaster(req, res) {
     const id = req.params.id;
-    const { nickname, title, description, city, contacts, picture_path } = req.body;
-    const updateMaster = await db.query("UPDATE masters SET nickname = $1, title = $2, description = $3, city = $4, contacts = $5, picture_path = $6 WHERE id = $7",
-    [nickname, title, description, city, contacts, picture_path, id])
-    res.json(updateMaster.rows)
+    const {
+      nickname,
+      title_master,
+      description,
+      city,
+      contacts,
+      picture_path,
+    } = req.body;
+    const updateMaster = await db.query(
+      "UPDATE masters SET nickname = $1, title_master = $2, description = $3, city = $4, contacts = $5, picture_path = $6 WHERE id = $7",
+      [nickname, title_master, description, city, contacts, picture_path, id]
+    );
+    res.json(updateMaster.rows);
   }
 }
 

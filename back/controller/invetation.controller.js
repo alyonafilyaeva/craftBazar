@@ -12,9 +12,10 @@ class InvetationController {
 
   async getInvetations(req, res) {
     const id_master = req.query.id_master
-    const requests = await db.query("SELECT * FROM invetations, masters, events WHERE invetations.master_id = masters.id AND invetations.event_id = events.id AND masters.id = $1",
+    const invetations = await db.query("SELECT * FROM invetations, masters, events WHERE invetations.master_id = masters.id AND invetations.event_id = events.id AND masters.id = $1",
     [id_master]);
-    res.json(requests.rows)
+    res.json(invetations.rows);
+    console.log('okey')
   }
 
   async getInvetation(req, res) {

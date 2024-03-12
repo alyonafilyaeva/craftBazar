@@ -39,8 +39,19 @@ class EventController {
   }
 
   async getEvents(req, res) {
-    const events = await db.query("SELECT * FROM events");
-    res.json(events.rows);
+    
+    const org_id = req.query.org_id
+
+    if (org_id) {
+      const events = await db.query("SELECT * FROM events WHERE organizer_id = $1", [org_id]);
+      res.json(events.rows);
+    }
+    else {
+      const events = await db.query("SELECT * FROM events")
+      res.json(events.rows);
+    }
+
+    
   }
 
   async getEvent(req, res) {
@@ -79,7 +90,7 @@ class EventController {
         link,
         cost,
         path_picture,
-        id,
+        id
       ]
     );
     res.json(updateEvent.rows);
@@ -87,7 +98,7 @@ class EventController {
 
   async deleteEvent(req, res) {
     const id = req.params.id
-    const event = await db.query("DELETE FROM events WHERE id = $1", [id])
+    const event = await db.query("DELETE FROM events WHERE id = $1", [id]);
     res.json(event.rows)
   }
 }

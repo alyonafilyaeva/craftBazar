@@ -9,9 +9,11 @@ const productRouter = require("./routes/product.router")
 const masterEventRouter = require('./routes/masterEvent.router')
 const favouriteEventRouter = require("./routes/favouriteEvent.router")
 const favouriteMasterRouter = require("./routes/favouriteMaster.router")
+const loginRouter = require("./routes/login.router")
 const app = express();
 
 app.use(express.json());
+app.use("/auth", loginRouter)
 app.use("/api", userRouter);
 app.use("/api", masterRouter);
 app.use("/api", organizerRouter);

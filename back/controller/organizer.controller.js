@@ -18,7 +18,7 @@ class OrganizerController {
 
   async getOrganizer(req, res) {
     const id = req.params.id;
-    const organizer = await db.query("SELECT * FROM organizers WHERE id = $1", [id]);
+    const organizer = await db.query("SELECT * FROM organizers WHERE user_id = $1", [id]);
     res.json(organizer.rows)
   }
 
