@@ -28,16 +28,17 @@ export const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         marginLeft: paddings.elementPadding,
-        fontFamily: 'Montserrat_100Thin'
     },
     accentText: {
+        fontFamily: 'Montserrat-Medium',
         color: colors.accentColor,
         fontSize: fonts.descriptionFont,
         fontWeight: '400'
     },
     mainText: {
+        fontFamily: 'Montserrat-Medium',
         fontSize: fonts.descriptionFont,
-        fontWeight: '400'
+        fontWeight: '500'
     },
     mastersBlock: {
         display: 'flex',
@@ -88,8 +89,8 @@ export const styles = StyleSheet.create({
         left: -80,
         paddingLeft: 20,
         paddingRight: 20,
-        paddingTop: 10,
-        paddingBottom: 10,
-        borderRadius: 20
+        paddingTop: 12,
+        paddingBottom: 12,
+        borderRadius: 25
     }
 })

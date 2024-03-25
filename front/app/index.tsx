@@ -8,7 +8,7 @@ import Navbar from "@/navigation/navbarNavigation";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AuthPage from "@/pages/authPage";
-import { useFonts } from "expo-font";
+import * as Font from 'expo-font';
 import * as SecureStore from "expo-secure-store";
 import { jwtDecode } from "jwt-decode";
 import AppNavigation from "@/navigation/appNavigation";
@@ -24,10 +24,19 @@ export default function App() {
     let res = await SecureStore.getItemAsync("token");
     setToken(res);
   }
+  async function getFont() {
+    await Font.loadAsync({
+      'Montserrat-Medium': require('../assets/fonts/Montserrat-Medium.ttf')
+    })
+    await Font.loadAsync({
+      'Montserrat-SemiBold': require('../assets/fonts/Montserrat-SemiBold.ttf')
+    })
+  }
 
   useEffect(() => {
     getToken();
     /* getUser() */
+    getFont()
     console.log("token", token);
   }, []);
   return (

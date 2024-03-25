@@ -16,7 +16,7 @@ export default function Login() {
         await SecureStore.setItemAsync(key, value);
     }
     let loginUser = async () => {
-        let response = await fetch(`${baseURL}/login/`, {
+        let response = await fetch(`${baseURL}/auth/login/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -58,7 +58,7 @@ return (
                 placeholder="Пароль"
             />
         </View>
-        <TouchableOpacity onPress={loginUser} style={[stylesSheet.accentButton, { marginTop: paddings.bodyPadding }]}>
+        <TouchableOpacity onPress={loginUser} style={[stylesSheet.button,stylesSheet.accentButton, { marginTop: paddings.bodyPadding }]}>
             <Text style={{ fontSize: fonts.descriptionFont, color: colors.secondColor, textAlign: 'center' }}>ВОЙТИ</Text>
         </TouchableOpacity>
     </View>

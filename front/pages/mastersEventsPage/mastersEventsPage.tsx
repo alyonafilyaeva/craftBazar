@@ -1,5 +1,5 @@
 import { View, Text, ImageBackground, TouchableOpacity, FlatList } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { colors, stylesSheet } from '@/styles/styles'
 import { styles } from './styles'
 import { FontAwesome6 } from '@expo/vector-icons'
@@ -7,12 +7,14 @@ import EventsMaster from '@/components/eventsMaster/eventsMaster'
 import { IMastersEvents } from '@/models/models'
 import axios from 'axios'
 import { baseURL } from '@/constants/constants'
+import { AuthContext } from '@/app/authContext'
 
 
 export default function MastersEventsPage({ navigation, route }) {
     let id = route.params.id
     let title = route.params.title
     let path = route.params.path
+    let org_id = route.params.org_id
     let [mastersEvents, setMastersEvents] = useState<Array<IMastersEvents>>([])
     useEffect(() => {
         axios.get(`${baseURL}/api/mastersEvents?${path}=${id}`).then(response => setMastersEvents(response.data))
@@ -36,7 +38,7 @@ export default function MastersEventsPage({ navigation, route }) {
                         <TouchableOpacity onPress={() =>
                             navigation.navigate('Event', { id: item.id })}
                         >
-                            <EventsMaster item={item} />
+                            <EventsMaster item={item} org_id={org_id} />
                         </TouchableOpacity>
                     )}
                 />

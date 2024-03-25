@@ -8,30 +8,30 @@ import Event from '@/components/event/event'
 import { baseURL } from '@/constants/constants'
 import { AuthContext } from '@/app/authContext'
 
-export default function OrgEventsPage({navigation}) {
+export default function OrgEventsPage({ navigation }) {
   let [events, setEvents] = useState<Array<IEvent>>([])
-  const {user} = useContext(AuthContext)
+  const { user } = useContext(AuthContext)
+  const [id, setId] = useState(0)
   useEffect(() => {
-    axios.get(`${baseURL}/events?idOrg=${user.id}`).then(response => setEvents(response.data))
-    console.log(events[0]?.address)
-  }, [])
+    axios.get(`${baseURL}/api/organizers/${user.id}`).then(response => setId(response.data[0].id))
+    axios.get(`${baseURL}/api/events?org_id=${id}`).then(response => setEvents(response.data))
+  }, [id])
   return (
     <View style={stylesSheet.container}>
       <View style={styles.topPanel}>
         <Text style={stylesSheet.title}>Мои события</Text>
-        <TouchableOpacity style={stylesSheet.accentButton} onPress={() =>
-                navigation.navigate('AddEvent', {
-                    name: 'Jane',
-                })
-            }>
-          <Text style={{fontSize: fonts.descriptionFont, color: colors.secondColor}}>Создать</Text>
+        <TouchableOpacity style={[stylesSheet.button ,stylesSheet.accentButton]} onPress={() =>
+          navigation.navigate('AddEvent')
+        }>
+          <Text style={{fontFamily: 'Montserrat-Medium', fontSize: fonts.descriptionFont, color: colors.secondColor }}>Создать</Text>
         </TouchableOpacity>
       </View>
       <FlatList
         showsVerticalScrollIndicator={false}
         data={events}
         renderItem={({ item }) => (
-          <TouchableOpacity
+          <TouchableOpacity onPress={() =>
+            navigation.navigate('Event', { id: item.id })}
           >
             <Event event={item} />
           </TouchableOpacity>

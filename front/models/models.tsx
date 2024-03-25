@@ -19,8 +19,8 @@ export interface IEvent {
 export interface IMaster {
     id?: number,
     nickname?: string,
-    title?: string,
-    descriprion?: string,
+    title_master?: string,
+    description?: string,
     picture?: string,
     city?: string,
     contacts?: string,
@@ -32,7 +32,7 @@ export interface IProduct {
     id?: number,
     title?: string,
     picture?: string,
-    descriprion?:
+    description?:
     string,
     cost?: number,
     idMaster?: number,
@@ -45,6 +45,7 @@ export interface IMastersEvents {
     is_paid: false,
     nickname: string,
     title: string,
+    title_master: string,
     description: string,
     city: string,
     contacts: string,
@@ -52,4 +53,29 @@ export interface IMastersEvents {
     user_id: number,
     date_start: string,
     address: string
+}
+
+export interface IRequest {
+    "id": number,
+    "master_id": number,
+    "event_id": number,
+    "is_active": boolean,
+    "nickname": string,
+    "title": string,
+    "title_master": string,
+    "description": string,
+    "city": string,
+    "contacts": string,
+    "picture_path": string,
+    "user_id": number,
+    "date_start": string,
+    "date_finish": string,
+    "time_start": string,
+    "time_finish":string,
+    "address": string,
+    "link": string,
+    "cost": number,
+    "path_picture": string,
+    "date_created": string,
+    "organizer_id": number
 }

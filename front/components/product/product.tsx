@@ -5,12 +5,13 @@ import { styles } from './style'
 import { colors, fonts, paddings } from '@/styles/styles'
 
 interface ProductProps {
-    product: IProduct
+    product: IProduct,
+    color: string
 }
 
 export default function Product(props: ProductProps) {
     return (
-        <View style={styles.productBlock}>
+        <View style={[styles.productBlock, props.color == 'secondColor' &&  {backgroundColor: colors.secondColor}]}>
             <Image source={require('../../assets/images/product.png')} />
             <View style={{marginLeft: paddings.elementPadding}}>
                 <Text style={{fontSize: fonts.descriptionFont}}>{props.product.title}</Text>

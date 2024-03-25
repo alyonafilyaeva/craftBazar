@@ -17,9 +17,9 @@ export default function Master(props: MasterProps) {
             </View>
             <View style={styles.textBlock}>
                 <View>
-                    <Text style={{ fontSize: 18, fontWeight: '500', paddingTop: 16 }}>{props?.master?.title}</Text>
-                    <Text style={{ fontSize: 14, paddingTop: 8, color: colors.accentColor }}>{props?.master?.nickname}</Text>
-                    <Text style={{ fontSize: 14, paddingTop: 8, color: colors.accentColor }}>{props?.master?.city}</Text>
+                    <Text style={{ fontFamily: 'Montserrat-Medium',fontSize: 18, fontWeight: '500', paddingTop: 16 }}>{props?.master?.title_master}</Text>
+                    <Text style={{ fontFamily: 'Montserrat-Medium',fontSize: 14, paddingTop: 8, color: colors.accentColor }}>{props?.master?.nickname}</Text>
+                    <Text style={{fontFamily: 'Montserrat-Medium', fontSize: 14, paddingTop: 8, color: colors.accentColor }}>{props?.master?.city}</Text>
                 </View>
                 <AntDesign name="hearto" size={30} color={colors.accentColor} />
             </View>

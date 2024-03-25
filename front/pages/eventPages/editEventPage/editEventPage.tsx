@@ -10,15 +10,29 @@ import { AuthContext } from '@/app/authContext'
 import { launchImageLibrary } from 'react-native-image-picker';
 import * as ImagePicker from 'react-native-image-picker';
 import { RadioButton } from 'react-native-paper'
+import {
+  NavigationParams,
+  NavigationScreenProp,
+  NavigationState,
+} from 'react-navigation';
+import { IEvent } from '@/models/models'
 
-export default function AddEventPage({ navigation }) {
+interface IdProps {
+  id: number,
+  navigation: NavigationScreenProp<NavigationState, NavigationParams>
+}
+
+export default function EditEventPage({ navigation, route }) {
+  let id = route.params.id
   const { user } = useContext(AuthContext)
-  const [selectedValue, setSelectedValue] = useState("one");
-  const [id, setId] = useState()
+  const [selectedValue, setSelectedValue] = useState("one")
+  const [event, setEvent] = useState<IEvent>()
+  const [title, setTitle] = useState()
   useEffect(() => {
-    axios.get(`${baseURL}/api/organizers/${user.id}`).then(response => setId(response.data[0].id))
+    axios.get(`${baseURL}/api/events/${id}`).then(response => setEvent(response.data[0]));
   }, [])
   console.log(id)
+  console.log('event', event)
   const options = {
     title: 'Select Image',
     type: 'library',
@@ -33,33 +47,53 @@ export default function AddEventPage({ navigation }) {
     console.log(result)
   }
   function AddEvent(values) {
-    axios
-      .post(
-        `${baseURL}/api/events/`,
+    axios({
+      method: "put",
+      url: `${baseURL}/api/events/${event?.id}`,
+      /* headers: {
+        Authorization: `Bearer ${token}`,
+      }, */
+      data: {
+        title: 'Хоровод',
+          date_start: event?.date_start,
+          time_start: event?.time_start,
+          time_finish: event?.time_finish,
+          city: event?.city,
+          address: event?.address,
+          description: event?.description,
+          link: event?.link,
+          cost: event?.cost,
+          path_picture: event?.path_picture,
+      },
+    }).then((response) => {
+      console.log(response);
+        navigation.goBack()
+    });
+    /* axios
+      .put(
+        `${baseURL}/api/events/${event?.id}`,
         {
-          title: values.title,
-          date_start: values.date,
-          time_start: values.time_start,
-          time_finish: values.time_finish,
-          city: values.city,
-          address: values.address,
-          description: values.description,
-          link: values.link,
-          cost: values.cost,
-          path_picture: values.picture,
-          organizer_id: id,
+          title: event?.title,
+          date_start: event?.date_start,
+          time_start: event?.time_start,
+          time_finish: event?.time_finish,
+          city: event?.city,
+          address: event?.address,
+          description: event?.description,
+          link: event?.link,
+          cost: event?.cost,
+          path_picture: event?.path_picture,
         },
         {
           headers: {
             "Content-Type": "application/json",
-            /* Authorization: `Bearer ${token}`, */
           },
         }
       )
       .then((response) => {
         console.log(response);
         navigation.goBack()
-      })
+      }) */
   }
   return (
     <ScrollView style={stylesSheet.container}>
@@ -70,13 +104,13 @@ export default function AddEventPage({ navigation }) {
           <FontAwesome6 name="angle-left" size={24} color={colors.accentColor} />
         </TouchableOpacity>
         <View style={{ justifyContent: 'center', alignItems: 'center', width: 'auto', marginLeft: 10 }}>
-          <Text style={stylesSheet.title}>Создать событие</Text>
+          <Text style={stylesSheet.title}>Редактировать событие</Text>
         </View>
 
       </View>
       <Formik
         initialValues={{
-          title: "",
+          title: title,
           date_start: "",
           time_start: "",
           time_finish: "",
@@ -94,31 +128,34 @@ export default function AddEventPage({ navigation }) {
 
           <View>
             <View style={styles.inputBlock}>
-              <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: fonts.descriptionFont}}>
+              <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: fonts.descriptionFont }}>
                 Название события
               </Text>
               <TextInput
                 style={stylesSheet.input}
-                onChangeText={handleChange("title")}
-                value={values.title}
+                onChangeText={(title) => setEvent(prevState => ({
+                  ...prevState,
+                  ['title']: title
+                }))}
+                value={event?.title}
                 placeholder="Название события"
               />
             </View>
             <View style={styles.radioButton}>
               <TouchableOpacity style={[styles.radio, selectedValue == 'one' && styles.active]} onPress={() => setSelectedValue("one")}></TouchableOpacity>
-              <Text style={{fontFamily: 'Montserrat-Medium',  fontSize: 16 }}>
+              <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: 16 }}>
                 Событие в один день
               </Text>
             </View>
             <View style={styles.radioButton}>
-            <TouchableOpacity style={[styles.radio, selectedValue == 'many' && styles.active]} onPress={() => setSelectedValue("many")}></TouchableOpacity>
-              <Text style={{fontFamily: 'Montserrat-Medium',  fontSize: 16 }}>
+              <TouchableOpacity style={[styles.radio, selectedValue == 'many' && styles.active]} onPress={() => setSelectedValue("many")}></TouchableOpacity>
+              <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: 16 }}>
                 Событие в несколько дней
               </Text>
             </View>
             <View style={[styles.inputBlock, styles.dateTimeBlock]}>
               <View style={{ width: '50%', marginRight: 30 }}>
-                <Text style={{fontFamily: 'Montserrat-Medium',  fontSize: fonts.descriptionFont }}>
+                <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: fonts.descriptionFont }}>
                   Дата
                 </Text>
                 <TextInput
@@ -129,7 +166,7 @@ export default function AddEventPage({ navigation }) {
                 />
               </View>
               <View>
-                <Text style={{fontFamily: 'Montserrat-Medium',  fontSize: fonts.descriptionFont }}>
+                <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: fonts.descriptionFont }}>
                   Время
                 </Text>
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -150,7 +187,7 @@ export default function AddEventPage({ navigation }) {
               </View>
             </View>
             <View style={styles.inputBlock}>
-              <Text style={{fontFamily: 'Montserrat-Medium',  fontSize: fonts.descriptionFont }}>
+              <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: fonts.descriptionFont }}>
                 Город
               </Text>
               <TextInput
@@ -161,7 +198,7 @@ export default function AddEventPage({ navigation }) {
               />
             </View>
             <View style={styles.inputBlock}>
-              <Text style={{fontFamily: 'Montserrat-Medium',  fontSize: fonts.descriptionFont }}>
+              <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: fonts.descriptionFont }}>
                 Место проводения
               </Text>
               <TextInput
@@ -172,7 +209,7 @@ export default function AddEventPage({ navigation }) {
               />
             </View>
             <View style={styles.inputBlock}>
-              <Text style={{fontFamily: 'Montserrat-Medium',  fontSize: fonts.descriptionFont}}>
+              <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: fonts.descriptionFont }}>
                 Стоимость участия
               </Text>
               <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -192,7 +229,7 @@ export default function AddEventPage({ navigation }) {
 
             </View>
             <View style={styles.inputBlock}>
-              <Text style={{fontFamily: 'Montserrat-Medium',  fontSize: fonts.descriptionFont}}>
+              <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: fonts.descriptionFont }}>
                 Описание
               </Text>
               <TextInput
@@ -205,7 +242,7 @@ export default function AddEventPage({ navigation }) {
               />
             </View>
             <View style={styles.inputBlock}>
-              <Text style={{fontFamily: 'Montserrat-Medium',  fontSize: fonts.descriptionFont }}>
+              <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: fonts.descriptionFont }}>
                 Основной ресурс продвижения
               </Text>
               <TextInput
@@ -216,7 +253,7 @@ export default function AddEventPage({ navigation }) {
               />
             </View>
             <View style={styles.inputBlock}>
-              <Text style={{fontFamily: 'Montserrat-Medium',  fontSize: fonts.descriptionFont }}>
+              <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: fonts.descriptionFont }}>
                 Ожидаемое количество мастеров
               </Text>
               <TextInput
@@ -227,7 +264,7 @@ export default function AddEventPage({ navigation }) {
               />
             </View>
             <View style={styles.imageBlock}>
-              <Text style={{fontFamily: 'Montserrat-Medium',  fontSize: fonts.descriptionFont }}>
+              <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: fonts.descriptionFont }}>
                 Загрузить изображение
               </Text>
               <TouchableOpacity style={styles.addImage} onPress={openGallery}>
@@ -236,11 +273,11 @@ export default function AddEventPage({ navigation }) {
 
             </View>
             <View style={styles.buttons}>
-              <TouchableOpacity style={[stylesSheet.button, stylesSheet.mainButton, {paddingLeft: 30, paddingRight: 30}]} onPress={() => navigation.navigate('OrgEvents')}>
-                <Text style={{fontFamily: 'Montserrat-Medium',  fontSize: fonts.descriptionFont, color: colors.accentColor }}>ОТМЕНИТЬ</Text>
+              <TouchableOpacity style={[stylesSheet.button, stylesSheet.mainButton, { paddingLeft: 30, paddingRight: 30 }]} onPress={() => navigation.navigate('OrgEvents')}>
+                <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: fonts.descriptionFont, color: colors.accentColor }}>ОТМЕНИТЬ</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[stylesSheet.button ,stylesSheet.accentButton, {paddingLeft: 30, paddingRight: 30}]} onPress={handleSubmit}>
-                <Text style={{fontFamily: 'Montserrat-Medium',  fontSize: fonts.descriptionFont, color: colors.secondColor }}>СОХРАНИТЬ</Text>
+              <TouchableOpacity style={[stylesSheet.button, stylesSheet.accentButton, { paddingLeft: 30, paddingRight: 30 }]} onPress={handleSubmit}>
+                <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: fonts.descriptionFont, color: colors.secondColor }}>СОХРАНИТЬ</Text>
               </TouchableOpacity>
             </View>
           </View>

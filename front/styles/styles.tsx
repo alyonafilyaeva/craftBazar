@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 export let colors = {
     mainColor: '#EDEDFD',
     secondColor: '#FFF',
-    accentColor: '#5F4BC4',
+    accentColor: '#816FDD',
     secondAccentColor: '#F8B1C3',
     greyColor: '#575757'
 }
@@ -23,10 +23,10 @@ export const stylesSheet = StyleSheet.create({
     container: {
         backgroundColor: colors.mainColor,
         padding: paddings.bodyPadding,
-        fontFamily: 'Montserrat',
-        height: '100%'
+        fontFamily: 'Montserrat-Medium',
+        height: '100%',
     },
-    containerWhite :{
+    containerWhite: {
         backgroundColor: colors.secondColor,
         padding: paddings.bodyPadding,
         fontFamily: 'Montserrat',
@@ -36,26 +36,33 @@ export const stylesSheet = StyleSheet.create({
         top: -50
     },
     title: {
+        fontFamily: 'Montserrat-SemiBold',
         fontSize: fonts.titleFont,
-        fontWeight: '700',
     },
-    accentButton: {
-        backgroundColor: colors.accentColor,
-        paddingRight: 30,
-        paddingLeft: 30,
-        paddingTop: 10,
-        paddingBottom: 10,
-        borderRadius: 50
-    },
-    mainButton: {
-        backgroundColor: colors.mainColor,
-        paddingRight: 30,
-        paddingLeft: 30,
+    button: {
+        paddingRight: 8,
+        paddingLeft: 8,
         paddingTop: 10,
         paddingBottom: 10,
         borderRadius: 50,
+        /* marginBottom: paddings.bodyPadding, */
+    },
+    accentButton: {
+        backgroundColor: colors.accentColor,
+        
+    },
+    mainButton: {
+        backgroundColor: colors.mainColor,
         borderWidth: 1,
-        borderColor: colors.accentColor
+        borderColor: colors.accentColor,
+    },
+    whiteButton: {
+        backgroundColor: colors.secondColor,
+        borderWidth: 1,
+        borderColor: colors.accentColor,
+    },
+    redButton: {
+        backgroundColor: colors.secondAccentColor
     },
     back: {
         backgroundColor: colors.secondColor,
@@ -65,7 +72,7 @@ export const stylesSheet = StyleSheet.create({
         height: 40,
         alignItems: 'center',
         justifyContent: 'center'
-    }, 
+    },
     icon: {
         backgroundColor: colors.mainColor,
         width: 50,

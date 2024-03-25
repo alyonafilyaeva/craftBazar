@@ -1,5 +1,5 @@
 import { View, Text, Button, ImageBackground, TouchableOpacity, FlatList, ScrollView } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { stylesSheet } from '@/styles/styles'
 import { Feather, MaterialIcons, FontAwesome, FontAwesome6, AntDesign, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { colors, fonts, paddings } from '@/styles/styles';
@@ -8,10 +8,12 @@ import { IEvent, IMaster, IMastersEvents, IProduct } from '@/models/models';
 import axios from 'axios';
 import { baseURL } from '@/constants/constants';
 import Product from '@/components/product/product';
+import { AuthContext } from '@/app/authContext';
 
 
 export default function MasterPage({ navigation, route }) {
   let id = route.params.id
+  let {user} = useContext(AuthContext)
   let [master, setMaster] = useState<IMaster>()
   let [products, setProducts] = useState<Array<IProduct>>()
   let [mastersEvents, setMastersEvents] = useState<Array<IMastersEvents>>([])
@@ -40,7 +42,7 @@ export default function MasterPage({ navigation, route }) {
       <View style={stylesSheet.containerWhite}>
         <View style={{ display: 'flex', flexDirection: 'column' }}>
           <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text style={{ fontSize: fonts.mainFont, fontWeight: '500' }}>{master?.title}</Text>
+            <Text style={{ fontSize: fonts.mainFont, fontWeight: '500' }}>{master?.title_master}</Text>
             <View style={{ backgroundColor: colors.mainColor, padding: 5, borderRadius: 20 }}>
               <Text style={{ color: colors.accentColor }}>#{master?.category}</Text>
             </View>
@@ -76,7 +78,7 @@ export default function MasterPage({ navigation, route }) {
                 <Ionicons name="time-outline" size={24} color={colors.accentColor} />
               </View>
               <View style={styles.textBlock}>
-                <Text style={styles.mainText}>Сроки изготовления</Text>
+                <Text style={styles.mainText}>Сроки{"\n"}изготовления</Text>
                 <Text style={styles.accentText}>{master?.time}</Text>
               </View>
             </View>
@@ -115,7 +117,7 @@ export default function MasterPage({ navigation, route }) {
           />
         </View>
 
-        <TouchableOpacity style={[stylesSheet.accentButton, {width: '50%', marginLeft: '25%', alignItems: 'center'}]}>
+        <TouchableOpacity style={[stylesSheet.button, stylesSheet.accentButton, {width: '50%', marginLeft: '25%', alignItems: 'center'}]}>
           <Text style={{color: colors.secondColor}}>ПРИГЛАСИТЬ</Text>
         </TouchableOpacity>
       </View>

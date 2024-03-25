@@ -4,9 +4,8 @@ import { colors, paddings, fonts } from "@/styles/styles";
 export const styles = StyleSheet.create({
     block: {
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: 'column',
         backgroundColor: colors.secondColor,
-        alignItems: 'center',
         borderRadius: 30,
         padding: paddings.bodyPadding,
         marginBottom: paddings.bodyPadding
@@ -29,9 +28,4 @@ export const styles = StyleSheet.create({
         backgroundColor: colors.secondAccentColor,
         borderRadius: 50
     },
-    isPaid: {
-        borderRadius: 20,
-        padding: 5,
-        color: colors.secondColor
-    }
 })
