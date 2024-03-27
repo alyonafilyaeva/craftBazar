@@ -32,7 +32,7 @@ class RequestController {
   async getReqest(req, res) {
     const id = req.params.id;
     const request = await db.query(
-      "SELECT * FROM requests, masters, events WHERE requests.master_id = masters.id AND requests.event_id = events.id AND requests.id = $1",
+      "SELECT * FROM requests, masters, events WHERE requests.master_id = masters.id AND requests.event_id = events.id AND requests.request_id = $1",
       [id]
     );
     res.json(request.rows);
@@ -41,15 +41,15 @@ class RequestController {
   async rejectRequest(req, res) {
     const id = req.params.id;
     const updateRequest = await db.query(
-      "UPDATE requests SET is_active = false WHERE id = $1",
+      "UPDATE requests SET is_active = false WHERE request_id = $1",
       [id]
     );
-    res.json(updateRequest.rows);
+    res.json(updateRequest.rows)
   }
 
   async acceptRequest(req, res) {
     const id = req.params.id;
-    const request = await db.query("DELETE FROM requests WHERE id = $1", [id]);
+    const request = await db.query("DELETE FROM requests WHERE request_id = $1", [id]);
     res.json(request.rows);
   }
 }

@@ -9,7 +9,8 @@ const productRouter = require("./routes/product.router")
 const masterEventRouter = require('./routes/masterEvent.router')
 const favouriteEventRouter = require("./routes/favouriteEvent.router")
 const favouriteMasterRouter = require("./routes/favouriteMaster.router")
-const loginRouter = require("./routes/login.router")
+const loginRouter = require("./routes/login.router");
+const categoryRouter = require('./routes/category.router')
 const app = express();
 
 app.use(express.json());
@@ -24,5 +25,6 @@ app.use("/api", productRouter);
 app.use("/api", masterEventRouter);
 app.use("/api", favouriteEventRouter);
 app.use("/api", favouriteMasterRouter);
+app.use('/api', categoryRouter)
 
 app.listen(3000, () => console.log("Server started"));

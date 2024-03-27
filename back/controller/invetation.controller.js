@@ -20,20 +20,20 @@ class InvetationController {
 
   async getInvetation(req, res) {
     const id = req.params.id
-    const invetation = await db.query("SELECT * FROM invetations, masters, events WHERE invetations.master_id = masters.id AND invetations.event_id = events.id AND invetations.id = $1",
+    const invetation = await db.query("SELECT * FROM invetations, masters, events WHERE invetations.master_id = masters.id AND invetations.event_id = events.id AND invetations.invetation_id = $1",
     [id])
     res.json(invetation.rows)
   }
 
   async rejectInvetation(req, res) {
     const id = req.params.id;
-    const updateInvetation = await db.query("UPDATE invetations SET is_active = false WHERE id = $1",[id])
+    const updateInvetation = await db.query("UPDATE invetations SET is_active = false WHERE invetation_id = $1",[id])
     res.json(updateInvetation.rows)
   }
 
   async acceptInvetation(req, res) {
     const id = req.params.id
-    const invetation = await db.query("DELETE FROM invetations WHERE id = $1", [id])
+    const invetation = await db.query("DELETE FROM invetations WHERE invetation_id = $1", [id])
     res.json(invetation.rows)
   }
 }

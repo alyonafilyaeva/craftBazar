@@ -29,7 +29,7 @@ class MasterController {
   async getMaster(req, res) {
     const id = req.params.id;
 
-    const master = await db.query("SELECT * FROM masters WHERE id = $1", [id]);
+    const master = await db.query("SELECT * FROM masters, categories WHERE masters.id = $1 AND masters.category_id = categories.category_id", [id]);
     res.json(master.rows);
   }
 

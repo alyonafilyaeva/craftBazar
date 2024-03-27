@@ -22,7 +22,7 @@ class FavouriteMasterController {
   async deleteFavouriteMaster(req, res) {
     const id = req.params.id;
     const favouriteMaster = await db.query(
-      "DELETE FROM favourite_masters WHERE id = $1",
+      "DELETE FROM favourite_masters WHERE id_fv = $1",
       [id]
     );
     res.json(favouriteMaster.rows);
