@@ -1,4 +1,5 @@
 import { View, Text, TouchableOpacity, ImageBackground, FlatList } from 'react-native'
+import { useIsFocused } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react'
 import { colors, fonts, stylesSheet } from '@/styles/styles'
 import { styles } from './styles'
@@ -11,6 +12,7 @@ import { QualifiedSlot } from 'expo-router/build/views/Navigator'
 import { AntDesign, Ionicons } from '@expo/vector-icons'
 
 export default function MasterProfilePage({ navigation }) {
+    let isFocused = useIsFocused()
     const { user } = useContext(AuthContext)
     const [master, setMaster] = useState<IMaster>({})
     let [products, setProducts] = useState<Array<IProduct>>([])
@@ -22,23 +24,28 @@ export default function MasterProfilePage({ navigation }) {
         await axios.get(`${baseURL}/api/products?master_id=3`).then(response => setProducts(response.data))
     }
     useEffect(() => {
-        getMaster()
-    }, [products])
+        if (isFocused) {
+            getMaster()
+        }
+    }, [isFocused])
     useEffect(() => {
-        getProducts()
-    }, [])
+        if (isFocused) {
+            getProducts()
+        }
+
+    }, [isFocused])
     return (
         <View style={stylesSheet.container}>
             <View style={styles.topPanel}>
                 <Text style={stylesSheet.title}>Профиль</Text>
                 <TouchableOpacity style={[stylesSheet.button, stylesSheet.accentButton]} onPress={() =>
-                    navigation.navigate('EditMasterProfile', {id: master.id})
+                    navigation.navigate('EditMasterProfile', { id: master.id })
                 }>
                     <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: fonts.descriptionFont, color: colors.secondColor }}>Редактировать</Text>
                 </TouchableOpacity>
             </View>
             <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: fonts.mainFont }}>{master?.title_master}</Text>
-            <ImageBackground source={require("../../../assets/images/master.png")} resizeMode="cover" style={{ height: 200, borderRadius: 20 }} />
+            <ImageBackground source={{uri: master?.picture_path}} resizeMode="cover" style={{ height: 200, borderRadius: 20 }} />
             <View style={styles.iconBlock}>
                 <View style={[stylesSheet.icon, { borderColor: colors.accentColor, borderWidth: 1 }]}>
                     <AntDesign name="enviromento" size={24} color={colors.accentColor} />
@@ -70,7 +77,7 @@ export default function MasterProfilePage({ navigation }) {
                     </TouchableOpacity>
                 )}
             />
-            <TouchableOpacity style={[stylesSheet.button, stylesSheet.accentButton, {width: '50%', marginLeft: '25%'}]} onPress={() =>
+            <TouchableOpacity style={[stylesSheet.button, stylesSheet.accentButton, { width: '50%', marginLeft: '25%' }]} onPress={() =>
                 navigation.navigate('AddProduct')
             }>
                 <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: fonts.descriptionFont, color: colors.secondColor, textAlign: 'center' }}>Добавить товар</Text>

@@ -22,5 +22,10 @@ export const styles = StyleSheet.create({
         shadowOffset: { width: 2, height: 4 },
         shadowOpacity: 0.2,
         shadowRadius: 3,
+    },
+    isPaid: {
+        borderRadius: 20,
+        padding: 5,
+        color: colors.secondColor
     }
 })

@@ -1,4 +1,5 @@
 import { View, Text, Button, ImageBackground, TouchableOpacity } from 'react-native'
+import { useIsFocused } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react'
 import { stylesSheet } from '@/styles/styles'
 import { Feather, MaterialIcons, FontAwesome, FontAwesome6, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -6,12 +7,13 @@ import { colors, fonts, paddings } from '@/styles/styles';
 import { styles } from './styles';
 import { IEvent, IMastersEvents } from '@/models/models';
 import axios from 'axios';
-import { baseURL } from '@/constants/constants';
+import { baseURL, toDate } from '@/constants/constants';
 import OrgEventModal from '@/components/modals/orgEventModal/orgEventModal';
 import { AuthContext } from '@/app/authContext';
 
 
 export default function EventPage({ navigation, route }) {
+  let isFocused = useIsFocused()
   let id = route.params.id
   const { user } = useContext(AuthContext)
   const [orgId, setOrgId] = useState()
@@ -19,13 +21,17 @@ export default function EventPage({ navigation, route }) {
   let [event, setEvent] = useState<IEvent>()
   let [mastersEvents, setMastersEvents] = useState<Array<IMastersEvents>>([])
   let [orgEventsModal, setOrgEventsModal] = useState(false)
-  console.log(id)
+  let newDate = toDate(event?.date_start?.slice(0, 10));
+  console.log(orgId)
+  console.log(event?.organizer_id)
+  console.log(user.id)
   useEffect(() => {
+    if (isFocused) {
     axios.get(`${baseURL}/api/events/${id}`).then(response => setEvent(response.data[0]))
     axios.get(`${baseURL}/api/organizers?user_id=${user.id}`).then(response => setOrgId(response.data[0].id))
     axios.get(`${baseURL}/api/masters?user_id=${user.id}`).then(response => setMasterId(response.data[0].id))
-    axios.get(`${baseURL}/api/mastersEvents?event_id=${id}`).then(response => setMastersEvents(response.data))
-  }, [])
+    axios.get(`${baseURL}/api/mastersEvents?event_id=${id}`).then(response => setMastersEvents(response.data))}
+  }, [isFocused])
 
   function sendRequest() {
     axios({
@@ -48,7 +54,7 @@ export default function EventPage({ navigation, route }) {
     <View>
       <View style={{ borderTopLeftRadius: 20 }}>
         {orgEventsModal && <OrgEventModal id={id} setOrgEventsModal={setOrgEventsModal} navigation={navigation} />}
-        <ImageBackground source={require("../../../assets/images/event.png")} resizeMode="cover" style={{ height: 250, borderTopLeftRadius: 20 }} />
+        <ImageBackground source={{uri: event?.path_picture}} resizeMode="cover" style={{ height: 250, borderTopLeftRadius: 20 }} />
         <View style={styles.topButtons}>
           <TouchableOpacity style={styles.back} onPress={() =>
             navigation.goBack()
@@ -70,7 +76,7 @@ export default function EventPage({ navigation, route }) {
                 <Feather name="calendar" size={24} color={colors.accentColor} />
               </View>
               <View style={styles.textBlock}>
-                <Text style={styles.mainText}>{event?.date_start?.slice(0, 10)}</Text>
+                <Text style={styles.mainText}>{newDate}</Text>
                 <View style={{ display: 'flex', flexDirection: 'row' }}>
                   <Text style={styles.accentText}>{event?.time_start?.slice(0, 5)}</Text>
                   <Text style={styles.accentText}>-</Text>
@@ -126,14 +132,14 @@ export default function EventPage({ navigation, route }) {
 
         <Text style={styles.mainText}>{event?.description}</Text>
 
-        <View style={{ display: 'flex', flexDirection: 'row', marginTop: paddings.bodyPadding }}>
+        <View style={{ display: 'flex', flexDirection: 'row', marginTop: paddings.bodyPadding, marginBottom: paddings.bodyPadding }}>
           <Text style={styles.mainText}>Основной ресурс продвижения: </Text>
           <Text style={styles.accentText}>site.com</Text>
         </View>
 
-        <TouchableOpacity style={[stylesSheet.button, stylesSheet.accentButton, { width: '60%', marginLeft: '20%' }]} onPress={sendRequest}>
+        {user.role == 'master' && <TouchableOpacity style={[stylesSheet.button, stylesSheet.accentButton, { width: '60%', marginLeft: '20%' }]} onPress={sendRequest}>
           <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: fonts.descriptionFont, color: colors.secondColor, textAlign: 'center' }}>ОТПРАВИТЬ ЗАЯВКУ</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>}
       </View>
     </View>
   )

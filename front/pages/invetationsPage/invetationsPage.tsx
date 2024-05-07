@@ -1,4 +1,5 @@
 import { View, Text, TouchableOpacity, FlatList } from 'react-native'
+import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react'
 import { colors, paddings, stylesSheet } from '@/styles/styles'
 import axios from 'axios'
@@ -10,23 +11,24 @@ import Invetation from '@/components/invetation/invetation'
 import { IRequest } from '@/models/models'
 
 export default function InvetationsPage({ navigation, route }) {
+  let isFocused = useIsFocused()
   let id = route.params.id
   let [invetations, setInvetations] = useState<IRequest>()
   let [active, setActive] = useState('new')
   useEffect(() => {
-    axios.get(`${baseURL}/api/invetations?id_master=${id}`).then(response => setInvetations(response.data))
-    
-  }, [])
-  console.log(id);
-  console.log(invetations)
+    if (isFocused) {
+      axios.get(`${baseURL}/api/invetations?id_master=${id}`).then(response => setInvetations(response.data.filter(invetation => invetation.is_active == true)))
+    }
+  }, [isFocused])
+
   function getNewRequests() {
-    /* setActive('new')
-    axios.get(`${baseURL}/api/invetations?id_master=${id}`).then(response => setInvetations(response.data)) */
+    setActive('new')
+    axios.get(`${baseURL}/api/invetations?id_master=${id}`).then(response => setInvetations(response.data.filter(invetation => invetation.is_active == true)))
   }
 
   function getRejectRequests() {
-    /* setActive('reject')
-    axios.get(`${baseURL}/api/invetations?id_master=${id}`).then(response => setInvetations(response.data.filter(invetation => invetation.is_active == false))) */
+    setActive('reject')
+    axios.get(`${baseURL}/api/invetations?id_master=${id}`).then(response => setInvetations(response.data.filter(invetation => invetation.is_active == false)))
   }
   return (
     <View style={stylesSheet.container}>

@@ -94,4 +94,15 @@ export const stylesSheet = StyleSheet.create({
         fontSize: fonts.descriptionFont,
         marginTop: paddings.elementPadding
     },
+    radio: {
+        width: 24,
+        height: 24,
+        borderColor: colors.accentColor,
+        borderWidth: 1,
+        borderRadius: 10,
+        marginRight: paddings.elementPadding
+    },
+    active: {
+        backgroundColor: colors.accentColor
+    }
 })

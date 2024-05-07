@@ -44,8 +44,8 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         width: 40,
         height: 40,
-        /* backgroundColor: colors.mainColor, */
+        backgroundColor: colors.secondColor,
         borderRadius: 50,
-        top: -240
+        marginRight: paddings.elementPadding
     },
 })

@@ -37,7 +37,7 @@ export const styles = StyleSheet.create({
     },
     mainText: {
         fontSize: fonts.descriptionFont,
-        fontWeight: '400'
+        fontWeight: '400',
     },
     mastersBlock: {
         display: 'flex',

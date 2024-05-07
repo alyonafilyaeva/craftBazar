@@ -1,4 +1,5 @@
 import { View, Text, TouchableOpacity, FlatList } from 'react-native'
+import { useIsFocused } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react'
 import { colors, paddings, stylesSheet } from '@/styles/styles'
 import axios from 'axios'
@@ -8,13 +9,15 @@ import { styles } from './styles'
 import { FontAwesome6 } from '@expo/vector-icons'
 
 export default function RequestsPage({ navigation, route }) {
+    let isFocused = useIsFocused()
     let id = route.params.id
     let path = route.params.path
     let [requests, setRequests] = useState([])
     let [active, setActive] = useState('new')
     useEffect(() => {
-        axios.get(`${baseURL}/api/requests?${path}=${id}`).then(response => setRequests(response.data.filter(request => request.is_active == true)))
-    }, [])
+        if (isFocused) {
+        axios.get(`${baseURL}/api/requests?${path}=${id}`).then(response => setRequests(response.data.filter(request => request.is_active == true)))}
+    }, [isFocused])
     console.log(path)
     function getNewRequests() {
         setActive('new')

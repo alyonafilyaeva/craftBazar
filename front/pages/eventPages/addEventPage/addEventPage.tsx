@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Input } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert, } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { Formik, Field, Form } from 'formik'
 import { stylesSheet, colors, fonts } from '@/styles/styles'
@@ -7,7 +7,7 @@ import { FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
 import axios from 'axios'
 import { baseURL } from '@/constants/constants'
 import { AuthContext } from '@/app/authContext'
-import { launchImageLibrary } from 'react-native-image-picker';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import * as ImagePicker from 'react-native-image-picker';
 import { RadioButton } from 'react-native-paper'
 
@@ -32,6 +32,28 @@ export default function AddEventPage({ navigation }) {
     const result = await ImagePicker.launchImageLibrary({ mediaType: 'photo' })
     console.log(result)
   }
+  const handleCameraLaunch = () => {
+    console.log('camera')
+    const options = {
+      mediaType: 'photo',
+      includeBase64: false,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+  
+    launchCamera(options, response => {
+      console.log('launch')
+      if (response.didCancel) {
+        console.log('User cancelled camera');
+      } else if (response.error) {
+        console.log('Camera Error: ', response.error);
+      } else {
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        /* setSelectedImage(imageUri); */
+        console.log(imageUri);
+      }
+    });
+  }
   function AddEvent(values) {
     axios
       .post(
@@ -46,7 +68,7 @@ export default function AddEventPage({ navigation }) {
           description: values.description,
           link: values.link,
           cost: values.cost,
-          path_picture: values.picture,
+          path_picture: 'https://cs6.livemaster.ru/storage/65/8d/3a856a70b2e27ef0897d361ff0py.jpg',
           organizer_id: id,
         },
         {
@@ -61,6 +83,70 @@ export default function AddEventPage({ navigation }) {
         navigation.goBack()
       })
   }
+
+  const requestCameraPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'Cool Photo App Camera Permission',
+          message:
+            'Cool Photo App needs access to your camera ' +
+            'so you can take awesome pictures.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the camera');
+      } else {
+        console.log('Camera permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+   // Stores the selected image URI 
+   const [file, setFile] = useState(null); 
+  
+   // Stores any error message 
+   const [error, setError] = useState(null); 
+ 
+   // Function to pick an image from  
+   //the device's media library 
+   const pickImage = async () => { 
+       const { status } = await ImagePicker. 
+           requestMediaLibraryPermissionsAsync(); 
+ 
+       if (status !== "granted") { 
+ 
+           // If permission is denied, show an alert 
+           Alert.alert( 
+               "Permission Denied", 
+               `Sorry, we need camera  
+                roll permission to upload images.` 
+           ); 
+       } else { 
+ 
+           // Launch the image library and get 
+           // the selected image 
+           const result = 
+               await ImagePicker.launchImageLibraryAsync(); 
+ 
+           if (!result.cancelled) { 
+ 
+               // If an image is selected (not cancelled),  
+               // update the file state variable 
+               setFile(result.uri); 
+ 
+               // Clear any previous errors 
+               setError(null); 
+           } 
+       } 
+   }; 
+ 
   return (
     <ScrollView style={stylesSheet.container}>
       <View style={styles.topPanel}>
@@ -210,7 +296,7 @@ export default function AddEventPage({ navigation }) {
               </Text>
               <TextInput
                 style={stylesSheet.input}
-                onChangeText={handleChange("title")}
+                onChangeText={handleChange("link")}
                 value={values.link}
                 placeholder="Сайт, страничка ВКонтакте и тд."
               />
@@ -221,7 +307,7 @@ export default function AddEventPage({ navigation }) {
               </Text>
               <TextInput
                 style={stylesSheet.input}
-                onChangeText={handleChange("title")}
+                onChangeText={handleChange("count_masters")}
                 value={values.count_masters}
                 placeholder="Ожидаемое количество мастеров"
               />
@@ -230,7 +316,7 @@ export default function AddEventPage({ navigation }) {
               <Text style={{fontFamily: 'Montserrat-Medium',  fontSize: fonts.descriptionFont }}>
                 Загрузить изображение
               </Text>
-              <TouchableOpacity style={styles.addImage} onPress={openGallery}>
+              <TouchableOpacity style={styles.addImage} onPress={pickImage}>
                 <MaterialCommunityIcons name="file-image-plus-outline" size={30} color={colors.accentColor} />
               </TouchableOpacity>
 

@@ -12,6 +12,8 @@ import {
 import { IMaster } from '@/models/models'
 import axios from 'axios'
 import { baseURL } from '@/constants/constants'
+import { SelectList } from 'react-native-dropdown-select-list'
+import { useIsFocused } from '@react-navigation/native'
 
 interface IdProps {
   id: number,
@@ -19,6 +21,7 @@ interface IdProps {
 }
 
 export default function EditMasterProfilePage({ navigation, route }) {
+  let isFocused = useIsFocused()
   let id = route.params.id
   const [master, setMaster] = useState<IMaster>()
   const [title, setTitle] = useState()
@@ -28,23 +31,31 @@ export default function EditMasterProfilePage({ navigation, route }) {
   const [time, setTime] = useState()
   const [category, setCategory] = useState()
   const [idMaster, setIdMaster] = useState()
+  const [categories, setCategories] = useState([])
   useEffect(() => {
-    axios.get(`${baseURL}/api/masters/${id}`).then(response => {
-      setMaster(response.data[0])
-      setTitle(response.data[0].title_master)
-      setDescription(response.data[0].description)
-      setPicture(response.data[0].picture_path)
-      setLink(response.data[0].link)
-      setTime(response.data[0].time)
-      setCategory(response.data[0].category_id)
-      setIdMaster(response.data[0].id)
-    })
-  }, [])
+    if (isFocused) {
+      axios.get(`${baseURL}/api/masters/${id}`).then(response => {
+        setMaster(response.data[0])
+        setTitle(response.data[0].title_master)
+        setDescription(response.data[0].description)
+        setPicture(response.data[0].picture_path)
+        setLink(response.data[0].link)
+        setTime(response.data[0].time)
+        setCategory(response.data[0].category_id)
+        setIdMaster(response.data[0].id)
+      })
+      axios.get(`${baseURL}/api/categories`).then(response => {
+        setCategories(response.data)
+      })
+    }
+  }, [isFocused])
+
+  let data = categories.map((item) => ({ key: item.category_id, value: item.category_title }))
 
   function EditMaster() {
     axios({
       method: "put",
-      url: `${baseURL}/api/masters/${idMaster}`,
+      url: `${baseURL}/api/masters/${id}/`,
       /* headers: {
         Authorization: `Bearer ${token}`,
       }, */
@@ -54,7 +65,7 @@ export default function EditMasterProfilePage({ navigation, route }) {
         link: link,
         picture_path: picture,
         time: time,
-        category: category,
+        category_id: category,
         nickname: master?.nickname,
         city: master?.city,
         contacts: master?.contacts,
@@ -65,6 +76,7 @@ export default function EditMasterProfilePage({ navigation, route }) {
       navigation.goBack()
     });
   }
+  console.log(category)
   return (
     <ScrollView style={stylesSheet.container}>
       <View style={styles.topPanel}>
@@ -112,7 +124,7 @@ export default function EditMasterProfilePage({ navigation, route }) {
             style={stylesSheet.input}
             onChangeText={setTime}
             value={time}
-            placeholder="Место проведения"
+            placeholder="Скрок изготовления"
           />
         </View>
 
@@ -131,12 +143,17 @@ export default function EditMasterProfilePage({ navigation, route }) {
           <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: fonts.descriptionFont }}>
             Категория
           </Text>
-          <TextInput
-            style={stylesSheet.input}
-            onChangeText={setCategory}
-            value={category}
+          <SelectList
+            setSelected={(key) => setCategory(key)}
+            data={data}
             placeholder="Категория"
-          />
+            searchPlaceholder="Найти категорию"
+            save="key"
+            boxStyles={{ borderRadius: 20, borderColor: colors.secondColor, backgroundColor: colors.secondColor }}
+            dropdownItemStyles={{
+              borderRadius: 20,
+              borderColor: colors.secondColor,
+            }} />
         </View>
         <View style={styles.imageBlock}>
           <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: fonts.descriptionFont }}>

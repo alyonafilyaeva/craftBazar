@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 import { IEvent } from "@/models/models";
-import EventsPage from "@/pages/navbarPages/eventsPage";
+import EventsPage from "@/pages/navbarPages/eventsPage/eventsPage";
 import { StatusBar } from "expo-status-bar";
 import Navbar from "@/navigation/navbarNavigation";
 import { NavigationContainer } from "@react-navigation/native";
@@ -14,9 +14,10 @@ import { jwtDecode } from "jwt-decode";
 import AppNavigation from "@/navigation/appNavigation";
 import { AuthContext } from "./authContext";
 import { baseURL } from "@/constants/constants";
+import { LogBox } from 'react-native';
 
 const Stack = createNativeStackNavigator();
-
+LogBox.ignoreAllLogs()
 export default function App() {
   let [token, setToken] = useState()
   let [user, setUser] = useState({})
@@ -40,6 +41,7 @@ export default function App() {
     console.log("token", token);
   }, []);
   return (
+
     <AuthContext.Provider value={{ token, setToken, user, setUser }}>
       <AppNavigation />
     </AuthContext.Provider>

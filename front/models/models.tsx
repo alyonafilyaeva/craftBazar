@@ -59,6 +59,7 @@ export interface IRequest {
     "id": number,
     "master_id": number,
     "event_id": number,
+    "request_id": number,
     "is_active": boolean,
     "nickname": string,
     "title": string,
