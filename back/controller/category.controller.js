@@ -8,7 +8,7 @@ class CategoryController {
 
   async getCategory(req, res) {
     const id = req.params.id;
-    const category = await db.query("SELECT * FROM categories WHERE id = $1", [id]);
+    const category = await db.query("SELECT * FROM categories WHERE category_id = $1", [id]);
     res.json(category.rows)
   }
 }

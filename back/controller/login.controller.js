@@ -23,7 +23,7 @@ class LoginController {
         refreshTokenSecret
       );
       refreshTokens.push(refreshToken);
-      console.log("refresh tokens", refreshTokens);
+      console.log("refresh tokens", refreshTokens)
       res.json({
         accessToken,
         refreshToken,

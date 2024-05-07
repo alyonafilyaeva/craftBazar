@@ -20,16 +20,17 @@ class MasterController {
       );
       res.json(master.rows);
     } else {
-      const masters = await db.query("SELECT * FROM masters")
-      res.json(masters.rows)
+      const masters = await db.query("SELECT * FROM masters");
+      res.json(masters.rows);
     }
-    
   }
 
   async getMaster(req, res) {
     const id = req.params.id;
-
-    const master = await db.query("SELECT * FROM masters, categories WHERE masters.id = $1 AND masters.category_id = categories.category_id", [id]);
+    const master = await db.query(
+      "SELECT * FROM masters WHERE masters.id = $1 ",
+      [id]
+    );
     res.json(master.rows);
   }
 
@@ -42,12 +43,52 @@ class MasterController {
       city,
       contacts,
       picture_path,
+      category_id,
+      link,
+      time,
     } = req.body;
     const updateMaster = await db.query(
-      "UPDATE masters SET nickname = $1, title_master = $2, description = $3, city = $4, contacts = $5, picture_path = $6 WHERE id = $7",
-      [nickname, title_master, description, city, contacts, picture_path, id]
+      "UPDATE masters SET nickname = $1, title_master = $2, description = $3, city = $4, contacts = $5, picture_path = $6, category_id = $7, link = $8, time = $9 WHERE id = $10",
+      [
+        nickname,
+        title_master,
+        description,
+        city,
+        contacts,
+        picture_path,
+        category_id,
+        link,
+        time,
+        id,
+      ]
     );
     res.json(updateMaster.rows);
+  }
+
+  async updateMasterData(req, res) {
+    const id = req.params.id;
+    const { nickname, city, contacts } = req.body;
+    if (nickname) {
+      const updateMaster = await db.query(
+        "UPDATE masters SET nickname = $1 WHERE id = $2",
+        [nickname, id]
+      );
+      res.json(updateMaster.rows);
+    }
+    if (city) {
+      const updateMaster = await db.query(
+        "UPDATE masters SET city = $1 WHERE id = $2",
+        [city, id]
+      );
+      res.json(updateMaster.rows);
+    }
+    if (contacts) {
+      const updateMaster = await db.query(
+        "UPDATE masters SET contacts = $1 WHERE id = $2",
+        [contacts, id]
+      );
+      res.json(updateMaster.rows);
+    }
   }
 }
 
